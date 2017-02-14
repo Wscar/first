@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:毕业设计2">
+
+    <Style x:Key="CountryListStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid Margin="10"  Name="grid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding Path=CountryPath}" Width="160" Height="220" Stretch="Fill" Grid.Row="0"></Image>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1">
+                            <TextBlock Name="text" Text="{Binding Path=Name}" FontSize="15"></TextBlock>
+                        </Label>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="FontWeight" Value="Bold" TargetName="text"></Setter>
+                            <Setter Property="Background" Value="DeepSkyBlue"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter  Property="Background" Value="DeepSkyBlue" TargetName="grid"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CountryList" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid Margin="10"  Name="grid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Image Source="{Binding Path=CountryPath }" Width="160" Height="200" Stretch="Fill" Grid.Row="0"></Image>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1">
+                            <TextBlock Name="text" Text="{Binding Path=Name}" FontSize="15"></TextBlock>
+                        </Label>
+
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="FontWeight" Value="Bold" TargetName="text"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Opacity" Value="0.8" TargetName="grid"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
