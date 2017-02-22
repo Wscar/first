@@ -117,6 +117,7 @@ namespace Model
             set
             {
                 _Percint = value;
+                
                 PropertyChangedEventHandler hander = this.PropertyChanged;
                 if (hander != null)
                 {
@@ -124,11 +125,12 @@ namespace Model
                 }
             }
         }
-        private ImageSource _musicPicture;
-        public  ImageSource MusicPicture
+        private byte[] _musicPicture;
+        public  byte[] MusicPicture
         {
             get { return _musicPicture; }
             set { _musicPicture = value;
+              
                 PropertyChangedEventHandler handler = this.PropertyChanged;
                 if (handler != null)
                 {
@@ -136,5 +138,6 @@ namespace Model
                 }
             }
         }
+       
     }
 }

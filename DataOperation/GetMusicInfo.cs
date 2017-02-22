@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Model;
 using System.Data;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace DataOperation
 {
@@ -12,7 +14,7 @@ namespace DataOperation
     {
         public List<MusicInfo> GetMusics(string country)
         { List<MusicInfo> musicinfos = new List<MusicInfo>();
-            string sql = "select * from musicinfo where MusicCountry="+"'"+country+"'";
+            string sql = "select musicID,musicname,musicauthor,musictime,MusicFileSize,musicfilepath,musiccountry,MusicSpecial from musicinfo where musiccountry=" + "'"+country+"'";
             DataTable dt= SqlHelper.ExcuterQuery(sql);
             foreach (DataRow item in dt.Rows)
             {
@@ -52,6 +54,17 @@ namespace DataOperation
             }
             return info;
         }
-
+        public byte[] GetMusicPicture(int id)
+        {
+            byte[] image = null;
+            string sql = "select musicpicture from MusicInfo where musicid=" + id;
+            image = SqlHelper.QueryMusicPicture(sql);
+            //MemoryStream ms = new MemoryStream(image);
+            //BitmapImage musicPicture = new BitmapImage();
+            //musicPicture.BeginInit();
+            //musicPicture.StreamSource = ms;
+            //musicPicture.EndInit();
+            return image;
+        }
     }
 }

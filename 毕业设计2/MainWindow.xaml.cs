@@ -36,6 +36,7 @@ namespace 毕业设计2
         public bool ListViewclick = false;
         public bool ListViewChanged = false;
         public bool UpDownClick = false;
+        public bool ShowMusic = false;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -73,6 +74,7 @@ namespace 毕业设计2
         {
             slider.Value = e.ProgressPercentage;
             StringBuilder sb = new StringBuilder();
+          
             if (slider.Value < 60)
             {
                 vm.Time = "0:" + slider.Value;
@@ -111,11 +113,17 @@ namespace 毕业设计2
                     {
                         //说明当前ListViewclick一点击结束
                         ListViewclick = false;
-
+                        byte[] image = vm.CreateImage(vm.MusicInfos[index].ID);
+                        vm.MusicInfos[index].MusicPicture = image;
                         mc.MusicPlay(vm.MusicInfos[index].MusicFilePath, handle);
+
                         vm.MusicPlaying = vm.MusicInfos[index];
+                   
+                        //vm.MusicPlaying.MusicPicture = image;
                         //得到歌曲的持续时间
                         mc.GetTotalTime(mc.Stream);
+                        vm.MusicTotalTime = mc.TotalTime;
+                       
                         int totalTime = mc.TotalTime;
                         int remainingtime = 1;
                         while (true)
@@ -275,6 +283,12 @@ namespace 毕业设计2
             }
             vm.QueryNativeMusicXML();
             lisBox.ItemsSource = vm.NativeMusic;
+           sliderVomule.AddHandler(Slider.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Slider_MouseLeftButtonDown), true);
+        }
+
+        private void Slider_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show(sliderVomule.Value.ToString());
         }
 
         /// <summary>
@@ -431,10 +445,28 @@ namespace 毕业设计2
                 CountryBorder.Visibility = Visibility.Visible;
                 MusicInfo.Visibility = Visibility.Hidden;
             }
-            if (DownLoadBorder.Visibility == Visibility.Visible && MusicInfo.Visibility == Visibility.Hidden)
+            //if (DownLoadBorder.Visibility == Visibility&&MusicInfo.Visibility==Visibility.Hidden)
+            //{
+            //    DownLoadBorder.Visibility = Visibility.Hidden;
+            //    MusicInfo.Visibility = Visibility.Visible;
+            //}
+            if (DownLoadBorder.Visibility == Visibility.Visible && CountryBorder.Visibility == Visibility.Hidden)
             {
                 DownLoadBorder.Visibility = Visibility.Hidden;
-                MusicInfo.Visibility = Visibility.Visible;
+                CountryBorder.Visibility = Visibility.Visible;
+            }
+            if (borderMusicMian.Visibility == Visibility.Visible)
+            {
+                borderMusicMian.Visibility = Visibility.Hidden;
+                CountryBorder.Visibility = Visibility.Visible;
+                MusicInfo.Visibility = Visibility.Hidden;
+            }
+
+            if (borderMusicMian.Visibility == Visibility.Visible && CountryBorder.Visibility == Visibility.Visible)
+            {
+                CountryBorder.Visibility = Visibility.Hidden;
+                CountryBorder.Visibility = Visibility.Visible;
+                MusicInfo.Visibility = Visibility.Hidden;
             }
         }
         /// <summary>
@@ -649,7 +681,7 @@ namespace 毕业设计2
             vm.MusicPlaying = vm.SelectItemNativeMusic;
        
             mc.GetTotalTime(mc.Stream);
-            slider.Maximum = mc.TotalTime;
+            vm.MusicTotalTime = mc.TotalTime;
             
             var pp = new Progress<int>();
             var task = Task.Run(() => MySilder(pp, 500));
@@ -798,8 +830,9 @@ namespace 毕业设计2
                         }
                         mc.CreateStream(vm.NativeMusic[index].MusicFilePath);
                         vm.MusicPlaying = vm.NativeMusic[index];
-                      
+                       
                         mc.GetTotalTime(mc.Stream);
+                        vm.MusicTotalTime = mc.TotalTime;
                     }
                     if (vm.MusicPlaying != vm.SelectItemNativeMusic && UpDownClick == true)
                     {
@@ -817,6 +850,7 @@ namespace 毕业设计2
                         mc.CreateStream(vm.NativeMusic[index].MusicFilePath);
 
                         mc.GetTotalTime(mc.Stream);
+                        vm.MusicTotalTime = mc.TotalTime;
                         //break;
                     }
                     if (bgWork.IsBusy == true)
@@ -837,7 +871,7 @@ namespace 毕业设计2
 
         }
         /// <summary>
-        /// 打开文件选择框
+        /// 打开下载列表
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -854,7 +888,7 @@ namespace 毕业设计2
                 MusicInfo.Visibility = Visibility.Hidden;
                 DownLoadBorder.Visibility = Visibility.Visible;
             }
-           
+            //DownLoadBorder.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// 展示音乐和歌词
@@ -863,7 +897,91 @@ namespace 毕业设计2
         /// <param name="e"></param>
         private void MusicShow(object sender, RoutedEventArgs e)
         {
+            ShowMusic = true;
+            if (MusicInfo.Visibility == Visibility.Visible)
+            {
             borderMusicMian.Visibility = Visibility.Visible;
+                MusicInfo.Visibility = Visibility.Hidden;
+            }
+            if (CountryBorder.Visibility == Visibility.Visible)
+            {
+                CountryBorder.Visibility = Visibility.Hidden;
+                borderMusicMian.Visibility = Visibility.Visible;
+            }
+          
+        }
+
+        private void sliderVomule_MouseMove(object sender, MouseEventArgs e)
+        {
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{
+            //    mc.SetVolume(sliderVomule.Value);
+
+            //}
+          
+        }
+
+        private void sliderVomule_MouseMove(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            mc.Volume =(int) sliderVomule.Value;
+        }
+
+        private void sliderVomule_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show(sliderVomule.Value.ToString());
+        }
+
+        private void sliderVomule_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show(sliderVomule.Value.ToString());
+        }
+
+        private void slider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            double value = slider.Value;
+            mc.MusicPause(mc.Stream);
+            //if (mc.Stream != 0)
+            //{
+               
+            //    mc.SetMusicPosition(mc.Stream, (long)value);
+            //    mc.MusicPlay(mc.Stream);
+            //}
+        }
+        /// <summary>
+        /// 关闭音乐展示窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Close_borderMusicMain(object sender, RoutedEventArgs e)
+        {
+            borderMusicMian.Visibility = Visibility.Hidden;
+           
+        }
+        /// <summary>
+        /// 国家列表点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CoutryList_SelectionChanged(object sender, MouseButtonEventArgs e)
+        {
+            if (this.vm.SlectecItem != null)
+            {
+                CountryBorder.Visibility = Visibility.Hidden;
+                MusicInfo.Visibility = Visibility.Visible;
+                vm.GetMusicInfos(vm.SlectecItem.Name);
+                listView.ItemsSource = vm.MusicInfos;
+                MusicCountry.Content = vm.SlectecItem.Name;
+                MusicCount.Content = vm.MusicCount;
+                MuiscCountryImag.Source = new BitmapImage(new Uri(vm.SlectecItem.CountryPath, UriKind.Relative));
+
+
+
+
+            }
+            else
+            {
+                MessageBox.Show("所选内容为空");
+            }
         }
     }
 }

@@ -35,5 +35,28 @@ namespace DataOperation
             }   
            
         }
+        public static byte[] QueryMusicPicture(string sql)
+        {
+            byte[] image = null;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(StrConn))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    SqlDataReader reder = cmd.ExecuteReader();
+                    while (reder.Read())
+                    {
+                        image = (byte[])reder["MusicPicture"];
+                    }
+                }
+               
+            }
+            catch(Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return image;
+        }
     }
 }

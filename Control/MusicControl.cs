@@ -237,5 +237,40 @@ namespace Control
             response.Close();
             return len;
         }
+        public void SetVolume(double volume)
+        {
+            Bass.BASS_SetVolume((float)volume);
+        }
+        int oldVolume = 100;//原来的音量
+        int volume = 100;//音量
+        /// <summary>
+        /// 音量0—100
+        /// </summary>
+        public int Volume
+        {
+            get
+            {
+                volume = Bass.BASS_GetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM) / 100;
+                return volume;
+            }
+            set
+            {
+                if (volume != value)
+                {
+                    volume = value;
+                    if (value > 100)
+                    {
+                        volume = 100;
+                    }
+                    if (value < 0)
+                    {
+                        volume = 0;
+                    }
+                    oldVolume = volume;
+                    Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_GVOL_STREAM, volume * 100);
+                 
+                }
+            }
+        }
     }
 }

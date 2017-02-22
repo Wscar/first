@@ -92,6 +92,19 @@ namespace ViewModel
             get;
             set;
         }
+        private int _musicTotalTime;
+        public int MusicTotalTime
+        {
+            get { return _musicTotalTime; }
+            set { _musicTotalTime = value;
+                PropertyChangedEventHandler handler = this.PropertyChanged;
+                if (handler != null)
+                {
+                    handler.Invoke(this, new PropertyChangedEventArgs(nameof(MusicTotalTime)));
+                }
+
+            }
+        }
         public int i
         {
             get;set;
@@ -234,8 +247,8 @@ namespace ViewModel
 
                info.MusicFilePath = path.Value;
                 ID3V2 id3v2 = new ID3V2();
-                BitmapImage image = id3v2.ReadMp3(path.Value);
-                info.MusicPicture = image;
+                 id3v2.ReadMp3(path.Value);
+                info.MusicPicture = id3v2.ImageByte;
                 XElement songtime = emp.Element("SongTime");
                 info.MusicTime = songtime.Value;
                 XElement author = emp.Element("MusicAuthor");
@@ -243,6 +256,14 @@ namespace ViewModel
                 NativeMusicInfo.Add(info);
             }
             this.NativeMusic = NativeMusicInfo;
+        }
+        public byte[] CreateImage(int id)
+        {
+            //BitmapImage image = new BitmapImage();
+            
+            GetMusicInfo getpictue = new GetMusicInfo();
+          byte[]  image=    getpictue.GetMusicPicture(id);
+            return image;
         }
     }
 }

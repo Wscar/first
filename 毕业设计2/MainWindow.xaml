@@ -28,6 +28,7 @@
             <ColumnDefinition   Width="1*" />
             <ColumnDefinition   Width="3.5*"/>
         </Grid.ColumnDefinitions>
+        <Slider></Slider>
         <!--头部-->
         <Border x:Name="borderTop" Background="#c62f2f" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,0.4">
             <Grid  ShowGridLines="True">
@@ -87,8 +88,8 @@
         <GridSplitter Grid.Column="0" Background="Gainsboro" Width="5" Grid.Row="1"/>
 
 
-        <Border Name="CountryBorder" Grid.Column="1" Visibility="Hidden" Margin="5" Grid.Row="1" >
-            <ListBox  Name="ListCountry" Margin="10" ItemsSource="{Binding Path=Countrys}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemContainerStyle="{StaticResource  CountryList}"  Grid.Row="1" Grid.Column="1"  SelectedItem="{Binding Path=SlectecItem}" SelectionChanged="CoutryList_SelectionChanged">
+        <Border Name="CountryBorder" Grid.Column="1" Visibility="Visible" Margin="5" Grid.Row="1" >
+            <ListBox  Name="ListCountry" Margin="10" ItemsSource="{Binding Path=Countrys}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemContainerStyle="{StaticResource  CountryList}"  Grid.Row="1" Grid.Column="1"  SelectedItem="{Binding Path=SlectecItem}" MouseLeftButtonUp="CoutryList_SelectionChanged">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel></WrapPanel>
@@ -123,16 +124,17 @@
             </Grid>
         </Border>
         <!--歌曲的主页-->
-        <Border Name="borderMusicMian" Grid.Column="1" Grid.Row="1" Margin="10" Visibility="Visible"  >
-            <Border.Background>
+        <Border Name="borderMusicMian" Grid.Column="1" Grid.Row="1" Margin="10" Visibility="Hidden" Background="White"  >
+            <!--<Border.Background>
                 <ImageBrush ImageSource="Picture/背景.jpg"></ImageBrush>
-            </Border.Background>
+            </Border.Background>-->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition ></ColumnDefinition>
                     <ColumnDefinition/>
 
                 </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Width="50" Height="40" Margin="308.8,6,19.6,517.2" Click="Close_borderMusicMain">关闭</Button>
                 <Ellipse x:Name="outerEllipse" Grid.Column="0" Width="300" Height="300" Margin="33,81,46.2,182.2" RenderTransformOrigin="0.5,0.5" >
                     <Ellipse.RenderTransform>
                         <TransformGroup>
@@ -146,6 +148,21 @@
                         <ImageBrush ImageSource="Picture/音乐转盘.png"></ImageBrush>
                     </Ellipse.Fill>
                 </Ellipse>
+                <Ellipse Width="300" Height="300" RenderTransformOrigin="1,0.5" Margin="33,346,46.2,-82.8">
+                    <Ellipse.Fill>
+                        <VisualBrush Visual="{Binding ElementName=outerEllipse}"></VisualBrush>
+                    </Ellipse.Fill>
+                    <Ellipse.RenderTransform>
+                        <!--反转效果-->
+                        <ScaleTransform ScaleY="-1"></ScaleTransform>
+                    </Ellipse.RenderTransform>
+                    <Ellipse.OpacityMask>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0.3" Color="Transparent"></GradientStop>
+                            <GradientStop Offset="1" Color="Gainsboro"></GradientStop>
+                        </LinearGradientBrush>
+                    </Ellipse.OpacityMask>
+                </Ellipse>
                 <Ellipse x:Name="insideEllipse" Grid.Column="0" Width="150" Height="150" Margin="33,81,46.2,182.2" RenderTransformOrigin="0.5,0.5" >
                     <Ellipse.RenderTransform>
                         <TransformGroup>
@@ -158,6 +175,21 @@
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding Path=MusicPlaying.MusicPicture}"></ImageBrush>
                     </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse Width="150" Height="150" RenderTransformOrigin="1,0.5" Margin="33,346,46.2,-82.8">
+                    <Ellipse.Fill>
+                        <VisualBrush Visual="{Binding ElementName=insideEllipse}"></VisualBrush>
+                    </Ellipse.Fill>
+                    <Ellipse.RenderTransform>
+                        <!--反转效果-->
+                        <ScaleTransform ScaleY="-1"></ScaleTransform>
+                    </Ellipse.RenderTransform>
+                    <Ellipse.OpacityMask>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0.3" Color="Transparent"></GradientStop>
+                            <GradientStop Offset="1" Color="Red"></GradientStop>
+                        </LinearGradientBrush>
+                    </Ellipse.OpacityMask>
                 </Ellipse>
             </Grid>
 
@@ -242,9 +274,10 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Slider Name="slider" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource Slider_CustomStyle}"></Slider>
+                <Slider Name="slider" Grid.Column="1" Maximum="{Binding Path=MusicTotalTime,Mode=TwoWay}" VerticalAlignment="Center" Style="{StaticResource Slider_CustomStyle}" IsMoveToPointEnabled="True" ToolTip="{Binding ElementName=slider,Path=Maximum}" MouseLeftButtonUp="slider_MouseLeftButtonUp"></Slider>
                 <Label Name="RemainderTime" Grid.Column="0" Content="{Binding Path=Time,Mode=TwoWay}" FontSize="20" VerticalAlignment="Center"></Label>
                 <Label Name="MusicName" Grid.Column="2" Content="{Binding Path=MusicPlaying.MusicTime,Mode=TwoWay}" FontSize="20" VerticalAlignment="Center"></Label>
+                <Slider Name="sliderVomule" Style="{StaticResource Slider_CustomStyle}" Grid.Column="3" Maximum="100" Value="30" ValueChanged="sliderVomule_MouseMove" ToolTip="{Binding ElementName=sliderVomule,Path=Value}" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True" MouseLeftButtonUp="sliderVomule_MouseLeftButtonUp"></Slider>
             </Grid>
         </Border>
     </Grid>

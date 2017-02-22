@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:毕业设计2">
-
+    <local:ImageConvert x:Key="ConvertImage"></local:ImageConvert>
     <Style x:Key="btnWindowControl" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="25"/>
         <Setter Property="Height" Value="25"/>
@@ -281,7 +281,7 @@
                         </Grid.ColumnDefinitions>
                         <Ellipse Grid.RowSpan="2" Grid.Column="0" Width="50" Height="50" HorizontalAlignment="Left">
                             <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding Path=MusicPicture}"></ImageBrush>
+                                    <ImageBrush ImageSource="{Binding Path=MusicPicture,Converter={StaticResource ConvertImage}}"></ImageBrush>
                             </Ellipse.Fill>
                         </Ellipse>
                         <TextBlock Text="{Binding Path=MusicName }" ToolTip="歌名" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
