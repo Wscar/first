@@ -37,7 +37,9 @@
   <ItemGroup>
     <Reference Include="Bass.Net, Version=2.4.12.3, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,9 +58,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppConfig.cs" />
     <Compile Include="ImageConvert.cs" />
     <Compile Include="MusicShow.xaml.cs">
       <DependentUpon>MusicShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Seting.xaml.cs">
+      <DependentUpon>Seting.xaml</DependentUpon>
     </Compile>
     <Compile Include="TestPage1.xaml.cs">
       <DependentUpon>TestPage1.xaml</DependentUpon>
@@ -80,6 +86,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MusicShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Seting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,6 +147,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bin\Debug\DownLoad\" />
     <Folder Include="bin\Debug\MusicPicture\" />
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,7 @@ namespace 毕业设计2
         BackgroundWorker bgWork = new BackgroundWorker();
         IntPtr handle;
         private MianViewModel vm;
+        public SetViewModel svm = new SetViewModel();
         public bool ListViewclick = false;
         public bool ListViewChanged = false;
         public bool UpDownClick = false;
@@ -284,6 +285,10 @@ namespace 毕业设计2
             vm.QueryNativeMusicXML();
             lisBox.ItemsSource = vm.NativeMusic;
            sliderVomule.AddHandler(Slider.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Slider_MouseLeftButtonDown), true);
+            //SetViewModel svm = new SetViewModel();
+
+            //svm.Folder =  AppConfig.GetFolderValue("Folder");
+            //DownLoadBorder.DataContext = svm;
         }
 
         private void Slider_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -491,7 +496,7 @@ namespace 毕业设计2
             vm.DownLoadMusic = new ObservableCollection<DownLoadMusic>(); 
             vm.DownLoadMusic.Add(dm);
             DownLoadView.ItemsSource = vm.DownLoadMusic;
-            var task = Task.Run(() => mc.DownLoadMusic(p,info.MusicFilePath, @"C:\Users\PC-DELL\Desktop" + "\\" + "22.mp3"));
+            var task = Task.Run(() => mc.DownLoadMusic(p,info.MusicFilePath, "DownLoad\\"+dm.Name+".mp3"));
             try
             {
                 await task;
@@ -907,8 +912,16 @@ namespace 毕业设计2
             {
                 CountryBorder.Visibility = Visibility.Hidden;
                 borderMusicMian.Visibility = Visibility.Visible;
-            }
-          
+           }
+            //if (File.Exists(vm.MusicPlaying.MusicFilePath))
+            //{
+            //    string filePath = vm.MusicPlaying.MusicFilePath;
+            //    string fileName = System.IO.Path.GetFileName(filePath);
+            //    string DirPath = System.IO.Path.GetDirectoryName(filePath);
+            //    int index = fileName.LastIndexOf(".");
+            //    fileName = fileName.Substring(0, index);
+            //    Directory.
+            //}
         }
 
         private void sliderVomule_MouseMove(object sender, MouseEventArgs e)
@@ -982,6 +995,22 @@ namespace 毕业设计2
             {
                 MessageBox.Show("所选内容为空");
             }
+        }
+        /// <summary>
+        /// 打开下载文件的文件夹
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenDownloadFolder(object sender, RoutedEventArgs e)
+        {
+            //获得当前程序的路径
+            //string str = this.GetType().Assembly.Location;
+            //str = System.IO.Path.GetDirectoryName(str);
+            
+            //System.Diagnostics.Process.Start("Explorer.exe", @"C:\Users\PC-DELL\Desktop\id3lib");
+          string result=  AppConfig.GetFolderValue("Folder");
+            svm.Folder = result;
+            System.Diagnostics.Process.Start("Explorer.exe", svm.Folder);
         }
     }
 }

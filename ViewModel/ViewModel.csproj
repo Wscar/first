@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <Compile Include="MianViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Control\Control.csproj">

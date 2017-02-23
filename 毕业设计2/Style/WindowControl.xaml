@@ -51,13 +51,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <TextBlock Name="text"></TextBlock>
-                        <ContentPresenter></ContentPresenter>
-                    </Grid>
+                   <Border  Name="border" CornerRadius="5" BorderThickness="0.5" Background="White" Height="30"  BorderBrush="Black">
+                       <Grid>
+                        
+                           <TextBlock Name="text" Foreground="Black"  VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+
+
+                            <ContentPresenter ></ContentPresenter>
+                    </Grid> 
+                   </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="FontWeight" Value="Bold" ></Setter>
+                        <Trigger Property="IsMouseOver" Value="true" >
+                            <Setter Property="Foreground" Value="White" TargetName="text"></Setter>
+                            <Setter Property="Background" Value="DeepSkyBlue" TargetName="border"></Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
