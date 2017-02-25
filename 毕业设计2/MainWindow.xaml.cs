@@ -22,6 +22,8 @@ using Un4seen.Bass;
 using System.ComponentModel;
 using System.Threading;
 using 毕业设计2;
+using System.Windows.Threading;
+using System.Windows.Media.Animation;
 
 namespace 毕业设计2
 {
@@ -38,6 +40,11 @@ namespace 毕业设计2
         public bool ListViewChanged = false;
         public bool UpDownClick = false;
         public bool ShowMusic = false;
+        LrcViewModel lrcVm = new LrcViewModel();
+        private List<int> TimeSpans;
+        private List<string> Titles;
+        private DispatcherTimer timer;
+        private Storyboard storyBoard;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -60,9 +67,53 @@ namespace 毕业设计2
             vm.QueryXml();
             //this.ListCountry.DataContext = Country;
             this.DataContext = vm;
-
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            //storyBoard = this.FindResource("LrcStory") as Storyboard;
+           
             InitializeComponent();
 
+        }
+
+        private void timer_tick(object sender, EventArgs e)
+        {
+            if (lrcVm.LrcInfo != null)
+            {
+             if (TimeSpans.Contains((int)vm.SliderValue))
+            {
+               int index= TimeSpans.IndexOf((int)vm.SliderValue);
+                    //listBoxLrc.SelectedIndex = index;
+                    if (index != 0&&index+1!=TimeSpans.Count)
+                    {
+                        UIElement ue = new UIElement();
+                        lrcVm.NowLrc = Titles[index];
+                        lrcVm.DownLrc = Titles[index - 1];
+                        lrcVm.UpLrc = Titles[index + 1];
+                        //storyBoard.Begin();
+                        int time = TimeSpans[index] - TimeSpans[index - 1];
+                        int nextTime = TimeSpans[index + 1] - TimeSpans[index];
+                        Storyboard DownLrcStory = new Storyboard();
+                       
+                        DoubleAnimation up = new DoubleAnimation(0, 30, new Duration(TimeSpan.FromSeconds(time)));
+                        DoubleAnimation next = new DoubleAnimation(30, 0, new Duration(TimeSpan.FromSeconds(nextTime)));
+                        up.RepeatBehavior = RepeatBehavior.Forever;
+                        DownLrcStory.Children.Add(up);
+                        DownLrcStory.Children.Add(next);
+                        Storyboard.SetTarget(up, lrcDown);
+                        Storyboard.SetTarget(next, lrcNext);
+                        Storyboard.SetTargetProperty(up, new PropertyPath("Effect.Radius"));
+                        Storyboard.SetTargetProperty(next, new PropertyPath("Effect.Radius"));
+                        DownLrcStory.Begin();
+
+                    }
+                    else {
+                        lrcVm.NowLrc = Titles[index];
+                    }
+                   
+             }
+            }
+          
+           
         }
 
 
@@ -79,7 +130,7 @@ namespace 毕业设计2
             if (slider.Value < 60)
             {
                 vm.Time = "0:" + slider.Value;
-
+                
             }
             else
             {
@@ -275,6 +326,7 @@ namespace 毕业设计2
         /// <param name="e"></param>
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
+            //storyBoard = this.FindResource("lrc") as Storyboard;
             WindowInteropHelper wndHelper = new WindowInteropHelper(this);
             handle = wndHelper.Handle;
             BassNet.Registration("546307885@qq.com", "2X34243714232222");
@@ -691,6 +743,7 @@ namespace 毕业设计2
             var pp = new Progress<int>();
             var task = Task.Run(() => MySilder(pp, 500));
             pp.ProgressChanged += (s, n) => { slider.Value = n;
+                vm.SliderValue = slider.Value;
                 StringBuilder sb = new StringBuilder();
                 if (slider.Value < 60)
                 {
@@ -701,6 +754,15 @@ namespace 毕业设计2
                 {
                     vm.Time = (int)(slider.Value) / 60 + ":" + (int)(slider.Value) % 60;
                 }
+                //while (true)
+                //{
+                //    int i = 0;
+                //    if (n == lrcVm.LrcInfo[i].LrcTime)
+                //    {
+                //        textNow.Text = lrcVm.LrcInfo[i].LrcStr;
+                //        break;
+                //    }
+                //}
             };
           
 
@@ -895,11 +957,13 @@ namespace 毕业设计2
             }
             //DownLoadBorder.Visibility = Visibility.Visible;
         }
+      
         /// <summary>
         /// 展示音乐和歌词
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// 
         private void MusicShow(object sender, RoutedEventArgs e)
         {
             ShowMusic = true;
@@ -913,14 +977,33 @@ namespace 毕业设计2
                 CountryBorder.Visibility = Visibility.Hidden;
                 borderMusicMian.Visibility = Visibility.Visible;
            }
-            //if (File.Exists(vm.MusicPlaying.MusicFilePath))
+            DataLrc lrc = new DataLrc();
+            lrc.GetLrcFile(vm.MusicPlaying.MusicFilePath);
+            lrc.MatchLrcInfo();
+              lrcVm = new LrcViewModel();
+          lrcVm.LrcInfo = lrc.LrcInfo;
+            gridLrc.DataContext = lrcVm;
+            //listBoxLrc.ItemsSource = lrc.Title;
+            TimeSpans = lrc.TimeSpan;
+            Titles = lrc.Title;
+            timer.Tick += timer_tick;
+            timer.Start();
+
+            //for (int i = 0; i < lrcVm.LrcInfo.Count;i++)
             //{
-            //    string filePath = vm.MusicPlaying.MusicFilePath;
-            //    string fileName = System.IO.Path.GetFileName(filePath);
-            //    string DirPath = System.IO.Path.GetDirectoryName(filePath);
-            //    int index = fileName.LastIndexOf(".");
-            //    fileName = fileName.Substring(0, index);
-            //    Directory.
+            // while(true)
+            //    {
+
+            //        if (slider.Value == lrcVm.LrcInfo[i].LrcTime)
+            //        {
+            //            textNow.Text = lrcVm.LrcInfo[i].LrcStr;
+            //            if (i != lrcVm.LrcInfo.Count)
+            //            {
+            //            textDown.Text = lrcVm.LrcInfo[i + 1].LrcStr;
+            //            }
+            //            break;
+            //        }
+            //    }
             //}
         }
 

@@ -105,6 +105,18 @@ namespace ViewModel
 
             }
         }
+        private double _sliderValue;
+        public double SliderValue
+        {
+            get { return _sliderValue; }
+            set { _sliderValue = value;
+                //PropertyChangedEventHandler handler = this.PropertyChanged;
+                //if (handler != null)
+                //{
+                //    handler.Invoke
+                //}
+            }
+        }
         public int i
         {
             get;set;

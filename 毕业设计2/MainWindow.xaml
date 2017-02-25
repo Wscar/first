@@ -12,8 +12,9 @@
         x:Name="window"
        Loaded="window_Loaded" >
     <Window.Resources>
-
-
+        <!--<Storyboard x:Name="LrcStory" x:Key="lrc" RepeatBehavior="Forever">
+            <DoubleAnimation Duration="0:0:2"  Storyboard.TargetName="lrcDown" From="10" To="0" Storyboard.TargetProperty="Effect.Radius"></DoubleAnimation>
+        </Storyboard>-->
     </Window.Resources>
     <!--头部-->
 
@@ -78,7 +79,7 @@
                         <Button Grid.Column="0" Style="{StaticResource btnNativeMusics}" Click="OpenFileDiaLog"
                                 HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Content="本地音乐"
                                 >
-                            
+
 
                         </Button>
                         <Button Grid.Column="1" Style="{StaticResource btnNativeMusics}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Click="OpenDownLoad">查看下载</Button>
@@ -90,7 +91,7 @@
         <GridSplitter Grid.Column="0" Background="Gainsboro" Width="5" Grid.Row="1"/>
 
 
-        <Border Name="CountryBorder" Grid.Column="1" Visibility="Visible" Margin="5" Grid.Row="1" >
+        <Border Name="CountryBorder" Grid.Column="1" Visibility="Hidden" Margin="5" Grid.Row="1" >
             <ListBox  Name="ListCountry" Margin="10" ItemsSource="{Binding Path=Countrys}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemContainerStyle="{StaticResource  CountryList}"  Grid.Row="1" Grid.Column="1"  SelectedItem="{Binding Path=SlectecItem}" MouseLeftButtonUp="CoutryList_SelectionChanged">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -107,7 +108,7 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
-               
+
                 <ListView  Name="DownLoadView" Grid.Row="2" ItemsSource="{Binding Path=DownLoadMusic}">
                     <ListView.View>
                         <GridView>
@@ -131,14 +132,14 @@
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
                     <Button Content="打开文件夹" Grid.Column="0" Height="30" Background="Transparent" BorderThickness="0"  Click="OpenDownloadFolder">
-                     
-                      
+
+
                     </Button>
                 </Grid>
             </Grid>
         </Border>
         <!--歌曲的主页-->
-        <Border Name="borderMusicMian" Grid.Column="1" Grid.Row="1" Margin="10" Visibility="Hidden" Background="White"  >
+        <Border Name="borderMusicMian" Grid.Column="1" Grid.Row="1" Margin="10" Visibility="Visible" Background="Gainsboro"  >
             <!--<Border.Background>
                 <ImageBrush ImageSource="Picture/背景.jpg"></ImageBrush>
             </Border.Background>-->
@@ -148,7 +149,7 @@
                     <ColumnDefinition/>
 
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Width="50" Height="40" Margin="308.8,6,19.6,517.2" Click="Close_borderMusicMain">关闭</Button>
+              
                 <Ellipse x:Name="outerEllipse" Grid.Column="0" Width="300" Height="300" Margin="33,81,46.2,182.2" RenderTransformOrigin="0.5,0.5" >
                     <Ellipse.RenderTransform>
                         <TransformGroup>
@@ -205,6 +206,24 @@
                         </LinearGradientBrush>
                     </Ellipse.OpacityMask>
                 </Ellipse>
+                <Grid Name="gridLrc" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Name="lrcDown" Grid.Row="0" Background="Gainsboro" Text="{Binding Path=DownLrc}" TextAlignment="Center" Margin="4,126,-3.6,185" Grid.RowSpan="2" FontSize="20" >
+                        <TextBlock.Effect>
+                            <BlurEffect Radius="0"></BlurEffect>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock  Name="lrcNow" Text="{Binding Path=NowLrc}" Grid.Row="1" Background="Gainsboro" TextAlignment="Center" Margin="0,78,0.4,55" FontSize="20"></TextBlock>
+                    <TextBlock Name="lrcNext" Grid.Row="2"  Background="Gainsboro" Text="{Binding Path=UpLrc}" Margin="-1,5,1.4,127.2" TextAlignment="Center"  FontSize="20">
+                        <TextBlock.Effect>
+                            <BlurEffect Radius="30"></BlurEffect>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Grid>
             </Grid>
 
         </Border>
